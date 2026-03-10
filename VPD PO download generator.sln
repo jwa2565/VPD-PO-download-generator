@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "VPD PO download generator", "VPD PO download generator\VPD PO download generator.pyproj", "{E063ED72-BE65-420B-8593-404A1E75C8BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E063ED72-BE65-420B-8593-404A1E75C8BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E063ED72-BE65-420B-8593-404A1E75C8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9487E68E-2283-45ED-A56E-2E4DE5EE8474}
+	EndGlobalSection
+EndGlobal
