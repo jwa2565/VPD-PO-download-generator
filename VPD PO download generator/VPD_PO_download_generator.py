@@ -12,26 +12,50 @@ today = str(date.today())
 
 import pandas as pd
 import os
+from dataclasses import dataclass, field
 
 df = pd.read_excel("VPD PO Download Spreadsheet V0.1.xlsx")
 
 
-unSortedOrders = pd.DataFrame(
-    columns=["fullOrder#", "Component", "Length", "Position", "Color"]
-)
-orderLists = pd.DataFrame(
-    columns=["Color", "profileID", "orders", "highestUsedPosition"]
-)
+#unSortedOrders = pd.DataFrame(
+#    columns=["fullOrder#", "Component", "Length", "Position", "Color"]
+#)
+#orderLists = pd.DataFrame(
+#    columns=["Color", "profileID", "orders", "highestUsedPosition"]
+#)
+
+@dataclass
+class OrderInfo:
+    fullOrderNum: str
+    component: str
+    length: float
+    position: int
+    color: str
+
+@dataclass
+class OrderSet:
+    order1: OrderInfo
+    order2: OrderInfo
+    
+@dataclass
+class OrderList:
+    color: str
+    profileID: str
+    orders: list[OrderSet] = field(default_factory=list)
+    highestUsedPosition: int = 0
+
+unsortedOrders: list[OrderInfo] = []
+orderLists: list[OrderList] = []
 
 componentList = [
-    "Active Horizontal",
-    "Active Vertical",
-    "Inactive Horizontal",
-    "Inactive Vertical",
+    "Active Horizontal", #0
+    "Active Vertical",    #1
+    "Inactive Horizontal",  #2
+    "Inactive Vertical",   #3
 ]
 
 print("Data import successful!")
-print("Generating PO download files...")
+print("Generating PO download files...") 
 
 
 def cleanDataFrame():
@@ -52,101 +76,122 @@ def cleanDataFrame():
 def calcPanelWidth(frameWidth):
     return (frameWidth / 2.0) - 0.188
 
-
 def calcPanelHeight(frameHeight):
     return frameHeight - 2.625
 
 
-def addRows_VPD(fullOrderNum, frameWidth, frameHeight, color, position):
+def addRows_VPD(fullOrderNumIn, frameWidth, frameHeight, colorIn, positionIn, typeIn):
 
     panelWidth = calcPanelWidth(frameWidth)
     panelHeight = calcPanelHeight(frameHeight)
+    
+    #############################component stuff
+    #"Active Horizontal", #0
+    #"Active Vertical",    #1
+    #"Inactive Horizontal",  #2
+    #"Inactive Vertical",   #3
+    componentsToUse = []
+    
+    if typeIn == "VPD": #Active Horizontal, Active Vertical, Inactive Horizontal, Inactive Vertical
+        componentsToUse = [0,1,2,3]  
+        
+    elif typeIn == "VPD Transom":
+        componentsToUse = [0] ###########Not correct riht now
+        
+    elif typeIn == "VPD FrameOnly":
+        componentsToUse = [0] ###########Not correct riht now
+        
+    elif typeIn == "VPD ActivePanelOnly":
+        componentsToUse = [0,1] #Active Horizontal, Active Vertical
 
-    for i in range(len(componentList)):
-        newRow = [fullOrderNum, componentList[i], panelWidth, position, color]
-        unSortedOrders.loc[len(unSortedOrders)] = newRow
+    elif typeIn == "VPD InactivePanelOnly":
+        componentsToUse = [2,3] #Inactive Horizontal, Inactive Vertical
+        
+    #############################component stuff    
+
+    for i in range(len(componentsToUse)):
+        if i == 0 or i == 2: #"Active Horizontal" or  "Inactive Horizontal"
+            newRow = OrderInfo(fullOrderNum = fullOrderNumIn, 
+                           component = componentList[componentsToUse[i]], 
+                           length = panelWidth, 
+                           position = positionIn, 
+                           color = colorIn)
+            
+        if i == 1 or i == 3: #"Active Vertical" or "Inactive Vertical"
+            newRow = OrderInfo(fullOrderNum = fullOrderNumIn, 
+                           component = componentList[componentsToUse[i]], 
+                           length = panelHeight, 
+                           position = positionIn, 
+                           color = colorIn)
+
+        unsortedOrders.append(newRow)
+        
+        
+
+def delThisProbs():
+    jo = "hi"
+    #def addRows_VPDTransom():
+    #    hi = "hihi"
 
 
-def addRows_VPDTransom():
-    hi = "hihi"
+    #def addRows_VPDFrameOnly():
+    #    hi = "hihi"
 
 
-def addRows_VPDFrameOnly():
-    hi = "hihi"
+    #def addRows_VPDActPanOnly(fullOrderNumIn, frameWidth, frameHeight, colorIn, positionIn):
+    #    panelWidth = calcPanelWidth(frameWidth)
+    #    panelHeight = calcPanelHeight(frameHeight)
+
+    #    componentsToUse = [0,1]  
+    #    #"Active Horizontal", #0
+    #    #"Active Vertical",    #1
+    #    #"Inactive Horizontal",  #2
+    #    #"Inactive Vertical",   #3
+
+    #    for i in range(len(componentsToUse)):
+    #        if i == 0 or i == 2: #"Active Horizontal" or  "Inactive Horizontal"
+    #            newRow = OrderInfo(fullOrderNum = fullOrderNumIn, 
+    #                           component = componentList[componentsToUse[i]], 
+    #                           length = panelWidth, 
+    #                           position = positionIn, 
+    #                           color = colorIn)
+    #            
+    #        if i == 1 or i == 3: #"Active Vertical" or "Inactive Vertical"
+    #            newRow = OrderInfo(fullOrderNum = fullOrderNumIn, 
+    #                           component = componentList[componentsToUse[i]], 
+    #                           length = panelHeight, 
+    #                           position = positionIn, 
+    #                           color = colorIn)#
+
+    #        unsortedOrders.append(newRow)
 
 
-def addRows_VPDActPanOnly(fullOrderNum, frameWidth, frameHeight, color, position):
-    panelWidth = calcPanelWidth(frameWidth)
-    panelHeight = calcPanelHeight(frameHeight)
-
-    newRow = [fullOrderNum, "Active Horizontal", panelWidth, position, color]
-    unSortedOrders.loc[len(unSortedOrders)] = newRow
-
-    newRow = [fullOrderNum, "Active Vertical", panelHeight, position, color]
-    unSortedOrders.loc[len(unSortedOrders)] = newRow
-
-
-def addRows_VPDInaPanOnly(fullOrderNum, frameWidth, frameHeight, color, position):
-    panelWidth = calcPanelWidth(frameWidth)
-    panelHeight = calcPanelHeight(frameHeight)
-
-    newRow = [fullOrderNum, "Inactive Horizontal", panelWidth, position, color]
-    unSortedOrders.loc[len(unSortedOrders)] = newRow
-
-    newRow = [fullOrderNum, "Inactive Vertical", panelHeight, position, color]
-    unSortedOrders.loc[len(unSortedOrders)] = newRow
+    #def addRows_VPDInaPanOnly(fullOrderNum, frameWidth, frameHeight, color, position):
+    #    panelWidth = calcPanelWidth(frameWidth)
+    #    panelHeight = calcPanelHeight(frameHeight)#
+    #
+    #    newRow = [fullOrderNum, "Inactive Horizontal", panelWidth, position, color]
+    #    unSortedOrders.loc[len(unSortedOrders)] = newRow
+    #
+    #    newRow = [fullOrderNum, "Inactive Vertical", panelHeight, position, color]
+     #   unSortedOrders.loc[len(unSortedOrders)] = newRow
 
 
 def fillUnsortedOrders():
     for i, rows in df.iterrows():
-        if df.iloc[i]["Type"] == "VPD":
-            addRows_VPD(
+        addRows_VPD(
                 df.iloc[i]["Full Scannable Order Number"],
                 df.iloc[i]["Frame Width"],
                 df.iloc[i]["Frame Height"],
                 df.iloc[i]["Color"],
                 i + 1,
-            )
-
-        if df.iloc[i]["Type"] == "VPD Transom":
-            addRows_VPD(
-                df.iloc[i]["Full Scannable Order Number"],
-                df.iloc[i]["Frame Width"],
-                df.iloc[i]["Frame Height"],
-                df.iloc[i]["Color"],
-                i + 1,
-            )
-
-        if df.iloc[i]["Type"] == "VPD FrameOnly":
-            addRows_VPD(
-                df.iloc[i]["Full Scannable Order Number"],
-                df.iloc[i]["Frame Width"],
-                df.iloc[i]["Frame Height"],
-                df.iloc[i]["Color"],
-                i + 1,
-            )
-
-        if df.iloc[i]["Type"] == "VPD ActivePanelOnly":
-            addRows_VPD(
-                df.iloc[i]["Full Scannable Order Number"],
-                df.iloc[i]["Frame Width"],
-                df.iloc[i]["Frame Height"],
-                df.iloc[i]["Color"],
-                i + 1,
-            )
-
-        if df.iloc[i]["Type"] == "VPD InactivePanelOnly":
-            addRows_VPD(
-                df.iloc[i]["Full Scannable Order Number"],
-                df.iloc[i]["Frame Width"],
-                df.iloc[i]["Frame Height"],
-                df.iloc[i]["Color"],
-                i + 1,
-            )
+                df.iloc[i]["Type"]
+            )            
 
 
-def generateOrderLists():  # makes all the lists needed, but its empty except the color
-    colorsInOrders = unSortedOrders["Color"].unique()
+def generateOrderLists():  # makes all the lists needed, but they're empty 
+    #colorsInOrders = unSortedOrders["Color"].unique()
+    colorsInOrders = list({order.color for order in unsortedOrders})
 
     panelProfileIDList = [
         "VPDPAH1",  # VPD Active Panel, Horizontal pieces, 1 unit
@@ -163,8 +208,12 @@ def generateOrderLists():  # makes all the lists needed, but its empty except th
 
     for i in range(len(colorsInOrders)):
         for j in range(len(panelProfileIDList)):
-            newList = [colorsInOrders[i], panelProfileIDList[j], [], 0]
-            orderLists.loc[len(orderLists)] = newList
+            newOrderList = OrderList(color = colorsInOrders[i], 
+                                     profileID = panelProfileIDList[j],
+                                     orders = [],
+                                     highestUsedPosition = 0)
+            orderLists.append(newOrderList)
+
 
 def initializeHighestUsedPosition():
     location = (
@@ -177,19 +226,16 @@ def fillOrderLists():
 
     generateOrderLists()
     
-    
-
-    for i, rows in unSortedOrders.iterrows():
-
+    for i in range(len(unsortedOrders)): #might have to change this to a while loop if I plan on removing things from unsortedOrders
         pairFound = False
         searchPosition = i + 1
-        searchEnd = len(unSortedOrders)
+        searchEnd = len(unsortedOrders)
         matchPosition = -1
-
+        
         while not pairFound and searchPosition < searchEnd:
-            if (unSortedOrders.iloc[searchPosition]["Component"] == unSortedOrders.iloc[i]["Component"]
-                and unSortedOrders.iloc[searchPosition]["Color"] == unSortedOrders.iloc[i]["Color"]
-                and unSortedOrders.iloc[searchPosition]["Length"] == unSortedOrders.iloc[i]["Length"]
+            if (unsortedOrders[searchPosition].component == unsortedOrders[i].component
+                and unsortedOrders[searchPosition].color == unsortedOrders[i].color
+                and unsortedOrders[searchPosition].length == unsortedOrders[i].length
                 ):
 
                 pairFound = True
@@ -198,33 +244,124 @@ def fillOrderLists():
             else:
                 searchPosition = searchPosition + 1
                 
-        if unSortedOrders.iloc[i]["Component"] == componentList[0]: #    "Active Horizontal",
-            if pairFound:
-                location = (
-                    (orderLists["Color"] == unSortedOrders.iloc[i]["Color"]) & 
-                    (orderLists["profileID"] == "VPDPAH2") 
-                    )
-                newOrders = [ unSortedOrders.iloc[i],  unSortedOrders.iloc[matchPosition]   ]
-                orderLists.loc[location, "orders"] = newOrders
+        tempProfileID = ""
+        tempOrder1 = OrderInfo(fullOrderNum = "", 
+               component = "", 
+               length = 0.0, 
+               position = 0, 
+               color = "")
+        tempOrder2 = OrderInfo(fullOrderNum = "", 
+               component = "", 
+               length = 0.0, 
+               position = 0, 
+               color = "")
+       # tempOrderSet = OrderSet()
+        
+
+        if unsortedOrders[i].component == componentList[0]: #    "Active Horizontal",
+            if pairFound:  
+                tempProfileID = "VPDPAH2"
+                tempOrder1 = unsortedOrders[i]
+                tempOrder2 = unsortedOrders[matchPosition]
+                    
+            else: 
+                tempProfileID = "VPDPAH1"
+                tempOrder1 = unsortedOrders[i]
                 
-            else:
-                location = (
-                    (orderLists["Color"] == unSortedOrders.iloc[i]["Color"]) & 
-                    (orderLists["profileID"] == "VPDPAH1") 
-                    )
-                newOrder = [ unSortedOrders.iloc[i]]
-                orderLists.loc[location, "orders"] = newOrder
+        elif unsortedOrders[i].component == componentList[1]: #    "Active Vertical",
+            if pairFound:  
+                tempProfileID = "VPDPAV2"
+                tempOrder1 = unsortedOrders[i]
+                tempOrder2 = unsortedOrders[matchPosition]
+                    
+            else: 
+                tempProfileID = "VPDPAV1"
+                tempOrder1 = unsortedOrders[i]
+                
+        elif unsortedOrders[i].component == componentList[2]: #    "Inactive Horizontal",
+            if pairFound:  
+                tempProfileID = "VPDPSH2"
+                tempOrder1 = unsortedOrders[i]
+                tempOrder2 = unsortedOrders[matchPosition]
+                    
+            else: 
+                tempProfileID = "VPDPSH1"
+                tempOrder1 = unsortedOrders[i]
+                
+        elif unsortedOrders[i].component == componentList[3]: #    "Inactive Vertical",
+            if pairFound:  
+                tempProfileID = "VPDPSV2"
+                tempOrder1 = unsortedOrders[i]
+                tempOrder2 = unsortedOrders[matchPosition]
+                    
+            else: 
+                tempProfileID = "VPDPSV1"
+                tempOrder1 = unsortedOrders[i]
+
+
+                
+        tempOrderSet = OrderSet(order1 = tempOrder1, order2 = tempOrder2)
+        
+        for k in range(len(orderLists)):
+            if (orderLists[k].color == unsortedOrders[i].color
+                and orderLists[k].profileID == tempProfileID):
+                orderLists[k].orders.append(tempOrderSet)
+                break
+            
+def del2():
+    mhm = "yep"
+    ##############################
+
+    #    for i, rows in unSortedOrders.iterrows():
+
+    #        pairFound = False
+    #        searchPosition = i + 1
+    #        searchEnd = len(unSortedOrders)
+    #        matchPosition = -1
+
+    #        while not pairFound and searchPosition < searchEnd:
+    #            if (unSortedOrders.iloc[searchPosition]["Component"] == unSortedOrders.iloc[i]["Component"]
+    #                and unSortedOrders.iloc[searchPosition]["Color"] == unSortedOrders.iloc[i]["Color"]
+    #                and unSortedOrders.iloc[searchPosition]["Length"] == unSortedOrders.iloc[i]["Length"]
+     #               ):
+    #
+    #                pairFound = True
+    #                matchPosition = searchPosition
+    #
+    #            else:
+    #                searchPosition = searchPosition + 1
+    #                
+    #        if unSortedOrders.iloc[i]["Component"] == componentList[0]: #    "Active Horizontal",
+     #           if pairFound:
+     #               location = (
+    #                    (orderLists["Color"] == unSortedOrders.iloc[i]["Color"]) & 
+    #                    (orderLists["profileID"] == "VPDPAH2") 
+     #                   )
+    #                #newOrders = [ unSortedOrders.iloc[i].tolist(),  unSortedOrders.iloc[matchPosition].tolist()   ]
+    #                #order1 = [1, "b"]
+    #                order1 = unSortedOrders.iloc[i]
+    #                order2 = unSortedOrders.iloc[matchPosition]
+    #                #orderLists.loc[location, "orders"] = [order1, order2]   #newOrders
+    #                orderLists.loc[location, "orders"] = order1   #newOrders
+    #                
+    #            else:
+    #                location = (
+    #                    (orderLists["Color"] == unSortedOrders.iloc[i]["Color"]) & 
+     #                   (orderLists["profileID"] == "VPDPAH1") 
+    #                    )
+                    #newOrder = [ unSortedOrders.iloc[i]]
+                    #orderLists.loc[location, "orders"] = newOrder
 
                 
             
-        elif unSortedOrders.iloc[i]["Component"] == componentList[1]: #    "Active Vertical",
-            jo1 = ""
-            
-        elif unSortedOrders.iloc[i]["Component"] == componentList[2]: #    "Inactive Horizontal",
-            jo2 = ""
-            
-        elif unSortedOrders.iloc[i]["Component"] == componentList[3]: #    "Inactive Vertical",
-            jo3 = ""
+    #        elif unSortedOrders.iloc[i]["Component"] == componentList[1]: #    "Active Vertical",
+     #           jo1 = ""
+     #           
+     #       elif unSortedOrders.iloc[i]["Component"] == componentList[2]: #    "Inactive Horizontal",
+     #           jo2 = ""
+     #           
+     #       elif unSortedOrders.iloc[i]["Component"] == componentList[3]: #    "Inactive Vertical",
+     #           jo3 = ""
             
         
        
@@ -232,27 +369,27 @@ def fillOrderLists():
 
         
 
-    # for i, rows in unSortedOrders.iterrows():
-    #    print("fullOrder#", unSortedOrders.iloc[i]["fullOrder#"],
-    #          "Component", unSortedOrders.iloc[i]["Component"],
-    #          "Length", unSortedOrders.iloc[i]["Length"],
-    #          "Position", unSortedOrders.iloc[i]["Position"],
-    #         "Color", unSortedOrders.iloc[i]["Color"],
-    #
-    #     )
+        # for i, rows in unSortedOrders.iterrows():
+        #    print("fullOrder#", unSortedOrders.iloc[i]["fullOrder#"],
+        #          "Component", unSortedOrders.iloc[i]["Component"],
+        #          "Length", unSortedOrders.iloc[i]["Length"],
+        #          "Position", unSortedOrders.iloc[i]["Position"],
+        #         "Color", unSortedOrders.iloc[i]["Color"],
+        #
+        #     )
 
-    # unSortedOrders = pd.DataFrame(columns = ["fullOrder#", "Component", "Length", "Position", "Color"])
-
-
-    for i, rows in orderLists.iterrows():
-        print("Color", orderLists.iloc[i]["Color"],
-           "profileID", orderLists.iloc[i]["profileID"],
-           "orders", orderLists.iloc[i]["orders"],
-           "highestUsedPosition", orderLists.iloc[i]["highestUsedPosition"]
-           )
+        # unSortedOrders = pd.DataFrame(columns = ["fullOrder#", "Component", "Length", "Position", "Color"])
 
 
-# orderLists = pd.DataFrame(columns = ["Color","profileID","orders","highestUsedPosition"])
+    #    for i, rows in orderLists.iterrows():
+    #        print("Color", orderLists.iloc[i]["Color"],
+    #           "profileID", orderLists.iloc[i]["profileID"],
+    #           "orders", orderLists.iloc[i]["orders"],
+    #           "highestUsedPosition", orderLists.iloc[i]["highestUsedPosition"]
+     #          )
+
+
+    # orderLists = pd.DataFrame(columns = ["Color","profileID","orders","highestUsedPosition"])
 
 
 cleanDataFrame()
@@ -260,5 +397,25 @@ fillUnsortedOrders()
 fillOrderLists()
 
 
+
 # print(df)
-# print(unSortedOrders)
+#print(unsortedOrders)
+
+#for i in range(len(unsortedOrders)):
+#    print("fullOrderNum", unsortedOrders[i].fullOrderNum,
+#          "component", unsortedOrders[i].component,
+#          "length", unsortedOrders[i].length,
+#          "position", unsortedOrders[i].position,
+#          "color", unsortedOrders[i].color)
+
+for i in range(len(orderLists)):
+    print("color", orderLists[i].color,
+          "profileID", orderLists[i].profileID,
+          "highestUsedPosition", orderLists[i].highestUsedPosition)
+    for j in range(len(orderLists[i].orders)):
+        print(j,
+              "Order1:", orderLists[i].orders[j].order1.fullOrderNum,
+              "Order2:", orderLists[i].orders[j].order2.fullOrderNum)
+         
+
+  
