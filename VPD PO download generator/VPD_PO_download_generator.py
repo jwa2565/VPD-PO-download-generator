@@ -39,7 +39,7 @@ class OrderList:
     color: str
     profileID: str
     orders: list[OrderSet] = field(default_factory=list)
-    highestUsedPosition: int = 0
+    highestUsedPosition: int = -1
 
 unsortedOrders: list[OrderInfo] = []
 orderLists: list[OrderList] = []
@@ -91,10 +91,10 @@ def printUnsortedOrders():
             
 
 def calcPanelWidth(frameWidth):
-    return (frameWidth / 2.0) - 0.188
+    return (frameWidth / 2.0) - 0.188 +.25 #DELETE THE +.25! Don't add til the end cause it causes headaches and confusion and chaos TRUST ME DUDE
 
 def calcPanelHeight(frameHeight):
-    return frameHeight - 2.625
+    return frameHeight - 2.625 +.25 #DELETE THE +.25! Don't add til the end cause it causes headaches and confusion and chaos TRUST ME DUDE
 
 
 def addRows_VPD(fullOrderNumIn, frameWidth, frameHeight, colorIn, positionIn, typeIn):
@@ -228,16 +228,27 @@ def generateOrderLists():  # makes all the lists needed, but they're empty
             newOrderList = OrderList(color = colorsInOrders[i], 
                                      profileID = panelProfileIDList[j],
                                      orders = [],
-                                     highestUsedPosition = 0)
+                                     highestUsedPosition = -1)
             orderLists.append(newOrderList)
 
 
-def initializeHighestUsedPosition():
-    location = (
-                    (orderLists["Color"] == unSortedOrders.iloc[0]["Color"]) & 
-                    (orderLists["profileID"] == "VPDPAH2") 
-                    )
-    orderLists.loc[location, "highestUsedPosition"] = 1
+def initializeHighestUsedPosition(): #the lowest SHOULD be the first position, but I'm checking all just to be safe. Initialization sets Highest Used Position to lowest position
+    
+    for i in range(len(orderLists)):
+        
+        if len(orderLists[i].orders) > 0:
+            currentLowestUsedPosition = orderLists[i].orders[0].order1.position
+        
+            for j in range(len(orderLists[i].orders)):
+                if orderLists[i].orders[j].order1.position > -1 and orderLists[i].orders[j].order1.position < currentLowestUsedPosition:
+                     currentLowestUsedPosition =  orderLists[i].orders[j].order1.position
+        
+                if orderLists[i].orders[j].order2.position > -1 and orderLists[i].orders[j].order2.position < currentLowestUsedPosition:
+                     currentLowestUsedPosition =  orderLists[i].orders[j].order2.position
+
+
+            orderLists[i].highestUsedPosition = currentLowestUsedPosition
+
 
 def addDataToOrderLists(pairFound, order1in, matchPosition):
     
@@ -245,7 +256,7 @@ def addDataToOrderLists(pairFound, order1in, matchPosition):
     tempOrder2 = OrderInfo(fullOrderNum = "", 
                component = "", 
                length = 0.0, 
-               position = 0, 
+               position = -1, 
                color = "")
 
     if order1in.component == componentList[0]: #    "Active Horizontal",
@@ -290,7 +301,7 @@ def addDataToOrderLists(pairFound, order1in, matchPosition):
             if (orderLists[k].color == order1in.color
                 and orderLists[k].profileID == tempProfileID):
                 orderLists[k].orders.append(tempOrderSet)
-                orderLists[k].highestUsedPosition = orderLists[k].highestUsedPosition + 1  ##Just for testing, delete this later
+                #orderLists[k].highestUsedPosition = orderLists[k].highestUsedPosition + 1  ##Just for testing, delete this later
                 break
 
 def fillOrderLists(): ##Make sure we only use this if there are items in unsortedOrders
@@ -325,7 +336,6 @@ def fillOrderLists(): ##Make sure we only use this if there are items in unsorte
         addDataToOrderLists(pairFound, order1, matchPosition)  
         
 def mergeToBOTHList():
-    jo = "do tha merge" 
 
     listIndicesToCheck = []   
     listBOTHindex = -1
@@ -350,18 +360,18 @@ def mergeToBOTHList():
            
         k = 0
         
-        print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
+        #print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
         if orderLists[listIndicesToCheck[0]].orders[k].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
             tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[k].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1)
             
             ##del unsortedOrders[matchPosition]
             
             orderLists[listBOTHindex].orders.append(tempOrderSet)
-            orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
+            #orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
             del orderLists[listIndicesToCheck[0]].orders[k]
-            orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+            #orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
             del orderLists[listIndicesToCheck[1]].orders[k]
-            orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+            #orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
 ###################################
         #Vertical
         listIndicesToCheck.clear()
@@ -382,18 +392,18 @@ def mergeToBOTHList():
            
         k = 0
         
-        print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
+        #print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
         if orderLists[listIndicesToCheck[0]].orders[k].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
                 tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[k].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1)
             
                 ##del unsortedOrders[matchPosition]
             
                 orderLists[listBOTHindex].orders.append(tempOrderSet)
-                orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
+                #orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
                 del orderLists[listIndicesToCheck[0]].orders[k]
-                orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+                #orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
                 del orderLists[listIndicesToCheck[1]].orders[k]
-                orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+               #orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
             
 
 
@@ -406,10 +416,11 @@ colorsInOrders = list({order.color for order in unsortedOrders})
 printUnsortedOrders()
 fillOrderLists()
 mergeToBOTHList()
-
+#printOrderList()
+initializeHighestUsedPosition()
 
 printOrderList()
-printUnsortedOrders()
+#printUnsortedOrders()
 
 
 
