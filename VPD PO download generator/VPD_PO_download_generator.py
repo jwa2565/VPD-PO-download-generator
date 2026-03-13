@@ -5,6 +5,7 @@
 print("Starting VPD's PO Download Generator!")
 print("Importing data...")
 
+from re import I
 import time
 from datetime import date
 
@@ -16,13 +17,8 @@ from dataclasses import dataclass, field
 
 df = pd.read_excel("VPD PO Download Spreadsheet V0.1.xlsx")
 
-
-#unSortedOrders = pd.DataFrame(
-#    columns=["fullOrder#", "Component", "Length", "Position", "Color"]
-#)
-#orderLists = pd.DataFrame(
-#    columns=["Color", "profileID", "orders", "highestUsedPosition"]
-#)
+# add "BIN" column to dataframe
+# add "welder code" to dataframe
 
 @dataclass
 class OrderInfo:
@@ -31,6 +27,7 @@ class OrderInfo:
     length: float
     position: int
     color: str
+
 
 @dataclass
 class OrderSet:
@@ -72,6 +69,26 @@ def cleanDataFrame():
         "empty"
     )
 
+def printOrderList():
+    print("Printing orderLists")
+    for i in range(len(orderLists)):
+        print("color", orderLists[i].color,
+              "profileID", orderLists[i].profileID,
+              "highestUsedPosition", orderLists[i].highestUsedPosition)
+        for j in range(len(orderLists[i].orders)):
+            print(j,
+                  "Order1:", orderLists[i].orders[j].order1.fullOrderNum,
+                  "Order2:", orderLists[i].orders[j].order2.fullOrderNum)
+
+def printUnsortedOrders():
+    print("Printing unsortedOrders")
+    for i in range(len(unsortedOrders)):
+        print("fullOrderNum", unsortedOrders[i].fullOrderNum,
+              "component", unsortedOrders[i].component,
+              "length", unsortedOrders[i].length,
+              "position", unsortedOrders[i].position,
+              "color", unsortedOrders[i].color)
+            
 
 def calcPanelWidth(frameWidth):
     return (frameWidth / 2.0) - 0.188
@@ -191,7 +208,7 @@ def fillUnsortedOrders():
 
 def generateOrderLists():  # makes all the lists needed, but they're empty 
     #colorsInOrders = unSortedOrders["Color"].unique()
-    colorsInOrders = list({order.color for order in unsortedOrders})
+    #colorsInOrders = list({order.color for order in unsortedOrders})
 
     panelProfileIDList = [
         "VPDPAH1",  # VPD Active Panel, Horizontal pieces, 1 unit
@@ -222,200 +239,177 @@ def initializeHighestUsedPosition():
                     )
     orderLists.loc[location, "highestUsedPosition"] = 1
 
-def fillOrderLists():
-
-    generateOrderLists()
+def addDataToOrderLists(pairFound, order1in, matchPosition):
     
-    for i in range(len(unsortedOrders)): #might have to change this to a while loop if I plan on removing things from unsortedOrders
-        pairFound = False
-        searchPosition = i + 1
-        searchEnd = len(unsortedOrders)
-        matchPosition = -1
-        
-        while not pairFound and searchPosition < searchEnd:
-            if (unsortedOrders[searchPosition].component == unsortedOrders[i].component
-                and unsortedOrders[searchPosition].color == unsortedOrders[i].color
-                and unsortedOrders[searchPosition].length == unsortedOrders[i].length
-                ):
-
-                pairFound = True
-                matchPosition = searchPosition
-
-            else:
-                searchPosition = searchPosition + 1
-                
-        tempProfileID = ""
-        tempOrder1 = OrderInfo(fullOrderNum = "", 
+    tempProfileID = ""
+    tempOrder2 = OrderInfo(fullOrderNum = "", 
                component = "", 
                length = 0.0, 
                position = 0, 
                color = "")
-        tempOrder2 = OrderInfo(fullOrderNum = "", 
-               component = "", 
-               length = 0.0, 
-               position = 0, 
-               color = "")
-       # tempOrderSet = OrderSet()
-        
 
-        if unsortedOrders[i].component == componentList[0]: #    "Active Horizontal",
-            if pairFound:  
+    if order1in.component == componentList[0]: #    "Active Horizontal",
+        if pairFound:  
                 tempProfileID = "VPDPAH2"
-                tempOrder1 = unsortedOrders[i]
                 tempOrder2 = unsortedOrders[matchPosition]
+                del unsortedOrders[matchPosition]
                     
-            else: 
+        else: 
                 tempProfileID = "VPDPAH1"
-                tempOrder1 = unsortedOrders[i]
                 
-        elif unsortedOrders[i].component == componentList[1]: #    "Active Vertical",
+    elif order1in.component == componentList[1]: #    "Active Vertical",
             if pairFound:  
                 tempProfileID = "VPDPAV2"
-                tempOrder1 = unsortedOrders[i]
                 tempOrder2 = unsortedOrders[matchPosition]
+                del unsortedOrders[matchPosition]
                     
             else: 
                 tempProfileID = "VPDPAV1"
-                tempOrder1 = unsortedOrders[i]
                 
-        elif unsortedOrders[i].component == componentList[2]: #    "Inactive Horizontal",
+    elif order1in.component == componentList[2]: #    "Inactive Horizontal",
             if pairFound:  
                 tempProfileID = "VPDPSH2"
-                tempOrder1 = unsortedOrders[i]
                 tempOrder2 = unsortedOrders[matchPosition]
+                del unsortedOrders[matchPosition]
                     
             else: 
                 tempProfileID = "VPDPSH1"
-                tempOrder1 = unsortedOrders[i]
                 
-        elif unsortedOrders[i].component == componentList[3]: #    "Inactive Vertical",
+    elif order1in.component == componentList[3]: #    "Inactive Vertical",
             if pairFound:  
                 tempProfileID = "VPDPSV2"
-                tempOrder1 = unsortedOrders[i]
                 tempOrder2 = unsortedOrders[matchPosition]
+                del unsortedOrders[matchPosition]
                     
             else: 
                 tempProfileID = "VPDPSV1"
-                tempOrder1 = unsortedOrders[i]
-
-
                 
-        tempOrderSet = OrderSet(order1 = tempOrder1, order2 = tempOrder2)
+    tempOrderSet = OrderSet(order1 = order1in, order2 = tempOrder2)
         
-        for k in range(len(orderLists)):
-            if (orderLists[k].color == unsortedOrders[i].color
+    for k in range(len(orderLists)):
+            if (orderLists[k].color == order1in.color
                 and orderLists[k].profileID == tempProfileID):
                 orderLists[k].orders.append(tempOrderSet)
+                orderLists[k].highestUsedPosition = orderLists[k].highestUsedPosition + 1  ##Just for testing, delete this later
                 break
-            
-def del2():
-    mhm = "yep"
-    ##############################
 
-    #    for i, rows in unSortedOrders.iterrows():
+def fillOrderLists(): ##Make sure we only use this if there are items in unsortedOrders
 
-    #        pairFound = False
-    #        searchPosition = i + 1
-    #        searchEnd = len(unSortedOrders)
-    #        matchPosition = -1
-
-    #        while not pairFound and searchPosition < searchEnd:
-    #            if (unSortedOrders.iloc[searchPosition]["Component"] == unSortedOrders.iloc[i]["Component"]
-    #                and unSortedOrders.iloc[searchPosition]["Color"] == unSortedOrders.iloc[i]["Color"]
-    #                and unSortedOrders.iloc[searchPosition]["Length"] == unSortedOrders.iloc[i]["Length"]
-     #               ):
-    #
-    #                pairFound = True
-    #                matchPosition = searchPosition
-    #
-    #            else:
-    #                searchPosition = searchPosition + 1
-    #                
-    #        if unSortedOrders.iloc[i]["Component"] == componentList[0]: #    "Active Horizontal",
-     #           if pairFound:
-     #               location = (
-    #                    (orderLists["Color"] == unSortedOrders.iloc[i]["Color"]) & 
-    #                    (orderLists["profileID"] == "VPDPAH2") 
-     #                   )
-    #                #newOrders = [ unSortedOrders.iloc[i].tolist(),  unSortedOrders.iloc[matchPosition].tolist()   ]
-    #                #order1 = [1, "b"]
-    #                order1 = unSortedOrders.iloc[i]
-    #                order2 = unSortedOrders.iloc[matchPosition]
-    #                #orderLists.loc[location, "orders"] = [order1, order2]   #newOrders
-    #                orderLists.loc[location, "orders"] = order1   #newOrders
-    #                
-    #            else:
-    #                location = (
-    #                    (orderLists["Color"] == unSortedOrders.iloc[i]["Color"]) & 
-     #                   (orderLists["profileID"] == "VPDPAH1") 
-    #                    )
-                    #newOrder = [ unSortedOrders.iloc[i]]
-                    #orderLists.loc[location, "orders"] = newOrder
-
-                
-            
-    #        elif unSortedOrders.iloc[i]["Component"] == componentList[1]: #    "Active Vertical",
-     #           jo1 = ""
-     #           
-     #       elif unSortedOrders.iloc[i]["Component"] == componentList[2]: #    "Inactive Horizontal",
-     #           jo2 = ""
-     #           
-     #       elif unSortedOrders.iloc[i]["Component"] == componentList[3]: #    "Inactive Vertical",
-     #           jo3 = ""
-            
+    generateOrderLists()
+    
+    while len(unsortedOrders) != 0:
         
-       
-
-
+        order1 = unsortedOrders[0]
+        del unsortedOrders[0]
         
+        pairFound = False
+        matchPosition = -1 
+         
+        if len(unsortedOrders) > 0: #look for pair
 
-        # for i, rows in unSortedOrders.iterrows():
-        #    print("fullOrder#", unSortedOrders.iloc[i]["fullOrder#"],
-        #          "Component", unSortedOrders.iloc[i]["Component"],
-        #          "Length", unSortedOrders.iloc[i]["Length"],
-        #          "Position", unSortedOrders.iloc[i]["Position"],
-        #         "Color", unSortedOrders.iloc[i]["Color"],
-        #
-        #     )
+                searchPosition = 0
+                searchEnd = len(unsortedOrders) 
+        
+                while not pairFound and searchPosition < searchEnd:
+                    if (unsortedOrders[searchPosition].component == order1.component
+                        and unsortedOrders[searchPosition].color == order1.color
+                        and unsortedOrders[searchPosition].length == order1.length
+                        ):
 
-        # unSortedOrders = pd.DataFrame(columns = ["fullOrder#", "Component", "Length", "Position", "Color"])
+                        pairFound = True
+                        matchPosition = searchPosition
+
+                    else:
+                        searchPosition = searchPosition + 1
+        
+        addDataToOrderLists(pairFound, order1, matchPosition)  
+        
+def mergeToBOTHList():
+    jo = "do tha merge" 
+
+    listIndicesToCheck = []   
+    listBOTHindex = -1
+
+    for i in range(len(colorsInOrders)):
+        
+         ##horizontal
+        for j in range(len(orderLists)): #find active horizontal 1
+           if  orderLists[j].color == colorsInOrders[i] and orderLists[j].profileID == "VPDPAH1":
+                listIndicesToCheck.append(j)
+                break
+           
+        for j in range(len(orderLists)): #find stationary horizontal 1
+           if  orderLists[j].color == colorsInOrders[i] and orderLists[j].profileID == "VPDPSH1":
+                listIndicesToCheck.append(j)
+                break
+
+        for j in range(len(orderLists)): #find both active and stationary horizontal
+           if  orderLists[j].color == colorsInOrders[i] and orderLists[j].profileID == "VPDPBH2":
+                listBOTHindex = j
+                break
+           
+        k = 0
+        
+        print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
+        if orderLists[listIndicesToCheck[0]].orders[k].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
+            tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[k].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1)
+            
+            ##del unsortedOrders[matchPosition]
+            
+            orderLists[listBOTHindex].orders.append(tempOrderSet)
+            orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
+            del orderLists[listIndicesToCheck[0]].orders[k]
+            orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+            del orderLists[listIndicesToCheck[1]].orders[k]
+            orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+###################################
+        #Vertical
+        listIndicesToCheck.clear()
+        for j in range(len(orderLists)): #find active Vertical 1
+               if  orderLists[j].color == colorsInOrders[i] and orderLists[j].profileID == "VPDPAV1":
+                    listIndicesToCheck.append(j)
+                    break
+           
+        for j in range(len(orderLists)): #find stationary Vertical 1
+               if  orderLists[j].color == colorsInOrders[i] and orderLists[j].profileID == "VPDPSV1":
+                    listIndicesToCheck.append(j)
+                    break
+
+        for j in range(len(orderLists)): #find both active and stationary Vertical
+               if  orderLists[j].color == colorsInOrders[i] and orderLists[j].profileID == "VPDPBV2":
+                    listBOTHindex = j
+                    break
+           
+        k = 0
+        
+        print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
+        if orderLists[listIndicesToCheck[0]].orders[k].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
+                tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[k].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1)
+            
+                ##del unsortedOrders[matchPosition]
+            
+                orderLists[listBOTHindex].orders.append(tempOrderSet)
+                orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
+                del orderLists[listIndicesToCheck[0]].orders[k]
+                orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+                del orderLists[listIndicesToCheck[1]].orders[k]
+                orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
+            
 
 
-    #    for i, rows in orderLists.iterrows():
-    #        print("Color", orderLists.iloc[i]["Color"],
-    #           "profileID", orderLists.iloc[i]["profileID"],
-    #           "orders", orderLists.iloc[i]["orders"],
-    #           "highestUsedPosition", orderLists.iloc[i]["highestUsedPosition"]
-     #          )
-
-
-    # orderLists = pd.DataFrame(columns = ["Color","profileID","orders","highestUsedPosition"])
 
 
 cleanDataFrame()
 fillUnsortedOrders()
+colorsInOrders = list({order.color for order in unsortedOrders})
+
+printUnsortedOrders()
 fillOrderLists()
+mergeToBOTHList()
+
+
+printOrderList()
+printUnsortedOrders()
 
 
 
-# print(df)
-#print(unsortedOrders)
-
-#for i in range(len(unsortedOrders)):
-#    print("fullOrderNum", unsortedOrders[i].fullOrderNum,
-#          "component", unsortedOrders[i].component,
-#          "length", unsortedOrders[i].length,
-#          "position", unsortedOrders[i].position,
-#          "color", unsortedOrders[i].color)
-
-for i in range(len(orderLists)):
-    print("color", orderLists[i].color,
-          "profileID", orderLists[i].profileID,
-          "highestUsedPosition", orderLists[i].highestUsedPosition)
-    for j in range(len(orderLists[i].orders)):
-        print(j,
-              "Order1:", orderLists[i].orders[j].order1.fullOrderNum,
-              "Order2:", orderLists[i].orders[j].order2.fullOrderNum)
-         
-
-  
