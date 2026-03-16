@@ -43,6 +43,7 @@ class OrderList:
 
 unsortedOrders: list[OrderInfo] = []
 orderLists: list[OrderList] = []
+cutList: list[OrderList] = []
 
 componentList = [
     "Active Horizontal", #0
@@ -50,6 +51,14 @@ componentList = [
     "Inactive Horizontal",  #2
     "Inactive Vertical",   #3
 ]
+
+#variables that I don't think will change
+stockLength_panelLineal = 157 #   157", 13'-1"
+stockLength_frameLineal = 197 #   197", 16'-5"
+stockLength_minLength = 3     #   3" min, the shortest material machine can hold before it fucks up
+trim_initial = 1  # 1" initial cut trim
+trim_inBetweenCuts = 2  # 2" to account for blade thickness and nailfin offsets #JO VERIFY IN THE GEOMETRYYYYYYYYYY
+
 
 print("Data import successful!")
 print("Generating PO download files...") 
@@ -249,6 +258,17 @@ def initializeHighestUsedPosition(): #the lowest SHOULD be the first position, b
 
             orderLists[i].highestUsedPosition = currentLowestUsedPosition
 
+def updateHighestUsedPosition(listToUpdate, position1in, position2in):
+    jo = "hihi" 
+
+    highestUsedPosition = position2in
+    
+    if position1in > position2in:
+        highestUsedPosition = position1in
+        
+    orderLists[listToUpdate].highestUsedPosition = highestUsedPosition
+    
+    
 
 def addDataToOrderLists(pairFound, order1in, matchPosition):
     
@@ -405,7 +425,15 @@ def mergeToBOTHList():
                 del orderLists[listIndicesToCheck[1]].orders[k]
                #orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
             
+def beginCutting():
+    jo = "hihi" 
+    
+    panelBarLength =  stockLength_panelLineal
+    panelBarLength = panelBarLength - trim_initial
+    panelBarLength = panelBarLength - trim_inBetweenCuts
+    
 
+    
 
 
 
@@ -416,11 +444,11 @@ colorsInOrders = list({order.color for order in unsortedOrders})
 printUnsortedOrders()
 fillOrderLists()
 mergeToBOTHList()
-#printOrderList()
+
 initializeHighestUsedPosition()
 
 printOrderList()
-#printUnsortedOrders()
+
 
 
 
