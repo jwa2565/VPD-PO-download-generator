@@ -53,11 +53,11 @@ componentList = [
 ]
 
 #variables that I don't think will change
-stockLength_panelLineal = 157 #   157", 13'-1"
+stockLength_panelLineal =192 #157 #   157", 13'-1"
 stockLength_frameLineal = 197 #   197", 16'-5"
-stockLength_minLength = 3     #   3" min, the shortest material machine can hold before it fucks up
-trim_initial = 1  # 1" initial cut trim
-trim_inBetweenCuts = 2  # 2" to account for blade thickness and nailfin offsets #JO VERIFY IN THE GEOMETRYYYYYYYYYY
+stockLength_minLength =3#3     #   3" min, the shortest material machine can hold before it fucks up
+trim_initial =4.5 #1  # 1" initial cut trim
+trim_inBetweenCuts =1 #2  # 2" to account for blade thickness and nailfin offsets #JO VERIFY IN THE GEOMETRYYYYYYYYYY
 
 
 print("Data import successful!")
@@ -88,6 +88,17 @@ def printOrderList():
             print(j,
                   "Order1:", orderLists[i].orders[j].order1.fullOrderNum,
                   "Order2:", orderLists[i].orders[j].order2.fullOrderNum)
+            
+def printCutList():
+    print("Printing cutList")
+    for i in range(len(cutList)):
+        print("color", cutList[i].color,
+              "profileID", cutList[i].profileID,
+              "highestUsedPosition", cutList[i].highestUsedPosition)
+        for j in range(len(cutList[i].orders)):
+            print(j,
+                  "Order1:", cutList[i].orders[j].order1.fullOrderNum,
+                  "Order2:", cutList[i].orders[j].order2.fullOrderNum)
 
 def printUnsortedOrders():
     print("Printing unsortedOrders")
@@ -259,9 +270,9 @@ def initializeHighestUsedPosition(): #the lowest SHOULD be the first position, b
             orderLists[i].highestUsedPosition = currentLowestUsedPosition
 
 def updateHighestUsedPosition(listToUpdate, position1in, position2in):
-    jo = "hihi" 
 
     highestUsedPosition = position2in
+    
     
     if position1in > position2in:
         highestUsedPosition = position1in
@@ -378,21 +389,34 @@ def mergeToBOTHList():
                 listBOTHindex = j
                 break
            
-        k = 0
         
-        #print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
-        if orderLists[listIndicesToCheck[0]].orders[k].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
-            tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[k].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1)
-            
-            ##del unsortedOrders[matchPosition]
-            
-            orderLists[listBOTHindex].orders.append(tempOrderSet)
-            #orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
-            del orderLists[listIndicesToCheck[0]].orders[k]
-            #orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
-            del orderLists[listIndicesToCheck[1]].orders[k]
-            #orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
-###################################
+        #printOrderList()
+
+
+        if orderLists[listIndicesToCheck[0]].highestUsedPosition > 0 and orderLists[listIndicesToCheck[1]].highestUsedPosition > 0:
+  
+            jToDelete = []
+            for j in range(len(orderLists[listIndicesToCheck[0]].orders )  ):
+                
+                for k in range(len(orderLists[listIndicesToCheck[1]].orders) ):
+                    if orderLists[listIndicesToCheck[0]].orders[j].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
+                        tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[j].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1) 
+                        orderLists[listBOTHindex].orders.append(tempOrderSet)   
+                        updateHighestUsedPosition(listBOTHindex, tempOrderSet.order1.position, tempOrderSet.order2.position)
+                        
+                        del orderLists[listIndicesToCheck[1]].orders[k]
+                        if len(orderLists[listIndicesToCheck[1]].orders) == 0:
+                            orderLists[listIndicesToCheck[1]].highestUsedPosition = -1
+                        jToDelete.append(j)
+                        break
+              
+            if len(jToDelete) > 0:            
+                jToDelete.sort(reverse=True)
+                for j in range(len(jToDelete)):
+                     del orderLists[listIndicesToCheck[0]].orders[j]
+                     if len(orderLists[listIndicesToCheck[0]].orders) == 0:
+                            orderLists[listIndicesToCheck[0]].highestUsedPosition = -1
+
         #Vertical
         listIndicesToCheck.clear()
         for j in range(len(orderLists)): #find active Vertical 1
@@ -410,44 +434,194 @@ def mergeToBOTHList():
                     listBOTHindex = j
                     break
            
-        k = 0
-        
-        #print("orderlist row 0, orders, first list, length: ", orderLists[listIndicesToCheck[0]].orders[k].order1.length)
-        if orderLists[listIndicesToCheck[0]].orders[k].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
-                tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[k].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1)
+       
+
+        if orderLists[listIndicesToCheck[0]].highestUsedPosition > 0 and orderLists[listIndicesToCheck[1]].highestUsedPosition > 0:
             
-                ##del unsortedOrders[matchPosition]
-            
-                orderLists[listBOTHindex].orders.append(tempOrderSet)
-                #orderLists[listBOTHindex].highestUsedPosition = orderLists[listBOTHindex].highestUsedPosition + 1 #JUST USED FOR TESTING< DELETE AFTER
-                del orderLists[listIndicesToCheck[0]].orders[k]
-                #orderLists[listIndicesToCheck[0]].highestUsedPosition = orderLists[listIndicesToCheck[0]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
-                del orderLists[listIndicesToCheck[1]].orders[k]
-               #orderLists[listIndicesToCheck[1]].highestUsedPosition = orderLists[listIndicesToCheck[1]].highestUsedPosition - 1 #JUST USED FOR TESTING< DELETE AFTER
-            
-def beginCutting():
-    jo = "hihi" 
+            jToDelete = []
+            for j in range(len(orderLists[listIndicesToCheck[0]].orders )  ):
+                
+               
+                for k in range(len(orderLists[listIndicesToCheck[1]].orders) ):
+                    if orderLists[listIndicesToCheck[0]].orders[j].order1.length == orderLists[listIndicesToCheck[1]].orders[k].order1.length:
+                        tempOrderSet = OrderSet(order1 = orderLists[listIndicesToCheck[0]].orders[j].order1, order2 = orderLists[listIndicesToCheck[1]].orders[k].order1) 
+                        orderLists[listBOTHindex].orders.append(tempOrderSet)   
+                        updateHighestUsedPosition(listBOTHindex, tempOrderSet.order1.position, tempOrderSet.order2.position)
+
+                        del orderLists[listIndicesToCheck[1]].orders[k]
+                        if len(orderLists[listIndicesToCheck[1]].orders) == 0:
+                            orderLists[listIndicesToCheck[1]].highestUsedPosition = -1
+                        jToDelete.append(j)
+                        break 
+           
+            if len(jToDelete) > 0:
+                jToDelete.sort(reverse=True)
+                for j in range(len(jToDelete)):
+                     del orderLists[listIndicesToCheck[0]].orders[j]
+                     if len(orderLists[listIndicesToCheck[0]].orders) == 0:
+                            orderLists[listIndicesToCheck[0]].highestUsedPosition = -1
+
+def cutHorizontalStuff(currentIndex):
+
     
-    panelBarLength =  stockLength_panelLineal
+    panelBarLength = stockLength_panelLineal
     panelBarLength = panelBarLength - trim_initial
     panelBarLength = panelBarLength - trim_inBetweenCuts
     
-
+    horizontalIndeces = [] #Horizontal and same color
     
+    for i in range(len(orderLists)):
+        tempOrientation = orderLists[i].profileID[5]
+        tempQTY = orderLists[i].profileID[6]
+        
+       
+        
+
+        if (orderLists[i].color == orderLists[currentIndex].color and #same color
+        tempOrientation == "H" and           #same orientation
+        tempQTY == orderLists[currentIndex].profileID[6]):   #same num of panels, 1 or 2
+             horizontalIndeces.append(i)
+             #print("inside the append JOOOOOOOOOOOOOOOOO")
+             
+        length = orderLists[currentIndex].orders[0].order1.length
+        #print(length)
+        
+       # print("lenfffffffff of horizontalIndeces", len(horizontalIndeces))
+
+    while (panelBarLength - orderLists[currentIndex].orders[0].order1.length)  > stockLength_minLength and len(horizontalIndeces) > 0:
+        print("barlength, start =", panelBarLength)
+        print("1")
+        printOrderList()
+        print("*************************************************************************************************************")
+        panelBarLength = panelBarLength - orderLists[currentIndex].orders[0].order1.length - trim_inBetweenCuts
+ 
+
+        updateHighestUsedPosition(currentIndex, orderLists[currentIndex].orders[0].order1.position, orderLists[currentIndex].orders[0].order2.position)
+       
+        tempSet = OrderSet(
+             order1 = orderLists[currentIndex].orders[0].order1,
+             order2 = orderLists[currentIndex].orders[0].order2
+            )
+
+        tempList = OrderList(
+            color = orderLists[currentIndex].color,
+            profileID = orderLists[currentIndex].profileID,
+            orders = [],
+            highestUsedPosition = orderLists[currentIndex].highestUsedPosition
+            
+            )
+        #orderLists[currentIndex].orders.pop(0)
+       
+        cutList.append(tempList)
 
 
+        cutList[len(cutList)-1].orders.append(tempSet) 
+        #print("2")
+        #printOrderList()
+        #print("*************************************************************************************************************")
+        orderLists[currentIndex].orders.pop(0)
+        print("3")
+        printOrderList()
+        print("*************************************************************************************************************")
+        
+
+        print(len(orderLists[currentIndex].orders))
+        if len(orderLists[currentIndex].orders) == 0:
+            orderLists[currentIndex].highestUsedPosition = -1
+            horizontalIndeces.remove(currentIndex)
+            
+            #print("4")
+            #printOrderList()
+            #print("*************************************************************************************************************")
+
+       # lowestUsedPosition = orderLists[currentIndex].highestUsedPosition
+
+        
+        
+        #print("1) currentIndex =", currentIndex)
+        #print("len horizontalIndeces: ", len(horizontalIndeces))
+        #for j in range(len(horizontalIndeces)):
+        #    if orderLists[j].highestUsedPosition > 0:
+        #        lowestUsedPosition = orderLists[j].highestUsedPosition
+        #        currentIndex = j
+                
+        lowestUsedPosition = orderLists[horizontalIndeces[0]].highestUsedPosition
+        currentIndex = horizontalIndeces[0]
+                
+        #print("lowestUsedPosition =", lowestUsedPosition)
+        
+        for j in range(len(horizontalIndeces)):
+            #print("1) currentIndex =", currentIndex)
+            #print("current highestUsedPosition", orderLists[currentIndex].highestUsedPosition)
+            #print("jth highest position:", orderLists[horizontalIndeces[j]].highestUsedPosition)
+            
+            #if orderLists[j].highestUsedPosition > 0 and orderLists[j].highestUsedPosition < lowestUsedPosition:
+            #    lowestUsedPosition = orderLists[j].highestUsedPosition
+            #    currentIndex = j
+                
+            if orderLists[horizontalIndeces[j]].highestUsedPosition > 0 and orderLists[horizontalIndeces[j]].highestUsedPosition < lowestUsedPosition:
+                lowestUsedPosition = orderLists[horizontalIndeces[j]].highestUsedPosition
+                currentIndex = horizontalIndeces[j]
+                
+            #print("2) currentIndex =", currentIndex)
+                
+        #print("2) currentIndex =", currentIndex)
+
+        print("barlength, end =", panelBarLength)
+        print((panelBarLength - orderLists[currentIndex].orders[0].order1.length))
+             
+            
+def beginCutting():
+    
+    
+    
+    lowestUsedPosition = -1
+    lowestUsedPositionIndex = -1
+    
+    for i in range(len(orderLists)): #to find the first lowestUsedPosition
+        if orderLists[i].highestUsedPosition > 0:
+            lowestUsedPosition = orderLists[i].highestUsedPosition
+            lowestUsedPositionIndex = i
+            break
+
+    for i in range(len(orderLists)): #to find the overall lowestUsedPoistion
+        if orderLists[i].highestUsedPosition > 0 and orderLists[i].highestUsedPosition < lowestUsedPosition:
+            lowestUsedPosition = orderLists[i].highestUsedPosition
+            lowestUsedPositionIndex = i
+            
+    
+    orientation = orderLists[lowestUsedPositionIndex].profileID[5] #gets the 5th character from the profileID, either H for horizontal or V for vertical
+    if orientation == "H": ##This is gunna be horizontal stuff
+         cutHorizontalStuff(lowestUsedPositionIndex)
+         
+    elif orientation == "V":
+        jo = "hihihiii" 
+
+
+#jToDelete = [] 
+#print("jToDelete Size:", len(jToDelete))
 
 cleanDataFrame()
 fillUnsortedOrders()
 colorsInOrders = list({order.color for order in unsortedOrders})
 
-printUnsortedOrders()
+#printUnsortedOrders()
 fillOrderLists()
+initializeHighestUsedPosition()
+#printOrderList()
 mergeToBOTHList()
-
+#printOrderList()
 initializeHighestUsedPosition()
 
-printOrderList()
+
+#printOrderList()
+
+#print("!!!!!!!!!!!!!!!!!!!!!", len(orderLists) )
+if len(orderLists) > 0:
+    beginCutting()
+
+#printOrderList()
+printCutList()
 
 
 
