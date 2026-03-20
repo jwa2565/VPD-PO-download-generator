@@ -9,6 +9,8 @@ from re import I
 import time
 from datetime import date
 
+from test import * #This is actually stuff to print (for debugging).  
+
 today = str(date.today())
 
 import pandas as pd
@@ -77,38 +79,7 @@ def cleanDataFrame():
     df["Full Scannable Order Number"] = df["Full Scannable Order Number"].fillna(
         "empty"
     )
-
-def printOrderList():
-    print("Printing orderLists")
-    for i in range(len(orderLists)):
-        print("color", orderLists[i].color,
-              "profileID", orderLists[i].profileID,
-              "highestUsedPosition", orderLists[i].highestUsedPosition)
-        for j in range(len(orderLists[i].orders)):
-            print(j,
-                  "Order1:", orderLists[i].orders[j].order1.fullOrderNum,
-                  "Order2:", orderLists[i].orders[j].order2.fullOrderNum)
-            
-def printCutList():
-    print("Printing cutList")
-    for i in range(len(cutList)):
-        print("color", cutList[i].color,
-              "profileID", cutList[i].profileID,
-              "highestUsedPosition", cutList[i].highestUsedPosition)
-        for j in range(len(cutList[i].orders)):
-            print(j,
-                  "Order1:", cutList[i].orders[j].order1.fullOrderNum,
-                  "Order2:", cutList[i].orders[j].order2.fullOrderNum)
-
-def printUnsortedOrders():
-    print("Printing unsortedOrders")
-    for i in range(len(unsortedOrders)):
-        print("fullOrderNum", unsortedOrders[i].fullOrderNum,
-              "component", unsortedOrders[i].component,
-              "length", unsortedOrders[i].length,
-              "position", unsortedOrders[i].position,
-              "color", unsortedOrders[i].color)
-            
+       
 
 def calcPanelWidth(frameWidth):
     return (frameWidth / 2.0) - 0.188 +.25 #DELETE THE +.25! Don't add til the end cause it causes headaches and confusion and chaos TRUST ME DUDE
@@ -491,7 +462,7 @@ def cutHorizontalStuff(currentIndex):
     while (panelBarLength - orderLists[currentIndex].orders[0].order1.length)  > stockLength_minLength and len(horizontalIndeces) > 0:
         print("barlength, start =", panelBarLength)
         print("1")
-        printOrderList()
+        printOrderList(orderLists)
         print("*************************************************************************************************************")
         panelBarLength = panelBarLength - orderLists[currentIndex].orders[0].order1.length - trim_inBetweenCuts
  
@@ -521,7 +492,7 @@ def cutHorizontalStuff(currentIndex):
         #print("*************************************************************************************************************")
         orderLists[currentIndex].orders.pop(0)
         print("3")
-        printOrderList()
+        printOrderList(orderLists)
         print("*************************************************************************************************************")
         
 
@@ -605,7 +576,7 @@ cleanDataFrame()
 fillUnsortedOrders()
 colorsInOrders = list({order.color for order in unsortedOrders})
 
-#printUnsortedOrders()
+printUnsortedOrders(unsortedOrders)
 fillOrderLists()
 initializeHighestUsedPosition()
 #printOrderList()
@@ -621,8 +592,10 @@ if len(orderLists) > 0:
     beginCutting()
 
 #printOrderList()
-printCutList()
+printCutList(cutList)
 
 
+#print("print the cut list:", printCutList())
+printCutList(cutList)
 
 

@@ -21,6 +21,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="FrameGenerator.py" />
+    <Compile Include="PanelGenerator.py" />
+    <Compile Include="PanelOptimization.py" />
+    <Compile Include="test.py" />
     <Compile Include="VPD_PO_download_generator.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
