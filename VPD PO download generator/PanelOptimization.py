@@ -1,4 +1,5 @@
 #I'll have stuff related to optimizing the panel file unit order here
+
 from SturtzFileFormats import lengthCorrectSturtzFormatConverter
 
 from dataclasses import dataclass, field
@@ -42,10 +43,10 @@ componentList = [
     "Inactive Vertical",   #3
 ]
 
-def calcPanelWidth(frameWidth):
+def calcPanelWidth(frameWidth): #got this from the BOM, but double check
     return (frameWidth / 2.0) - 0.188 +.25 #DELETE THE +.25! Don't add til the end cause it causes headaches and confusion and chaos TRUST ME DUDE
 
-def calcPanelHeight(frameHeight):
+def calcPanelHeight(frameHeight): #got this from the BOM, but double check
     return frameHeight - 2.625 +.25 #DELETE THE +.25! Don't add til the end cause it causes headaches and confusion and chaos TRUST ME DUDE
 
 #takes in frame width from spreadsheet and returns the correct float
@@ -553,6 +554,7 @@ def beginCutting(orderLists, cutList):
                 break
 
 def optimizeOrders(df):
+    print("Optimizing panel cuts...")
     
     unsortedOrders: list[OrderInfo] = []
     orderLists: list[OrderList] = []
@@ -568,5 +570,7 @@ def optimizeOrders(df):
     
     if len(orderLists) > 0:
         beginCutting(orderLists, cutList)
+        
+    print("Optimization complete!")
 
     return cutList

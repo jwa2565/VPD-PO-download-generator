@@ -10,6 +10,11 @@
 #            Note to self: If I could figure out a better way to input the data from Atlas into the program, that would 
 #            be a game changer. Future research should involve accessing SQL databases through my programs
 
+#BETA v1.2   Bug fixes
+#            General observations: I don't like all of the loops I'm using. Not bad for whipping something up in just 6 days 
+#            worth of programming, but def think about ways to improve this. A lot of my loops in the panel come from searching
+#            the dataframe to find a particular order's row. I'd start here for my thoughts
+
 print("Starting VPD's PO Download Generator!")
 print("Importing data...")
 import pandas as pd
@@ -27,11 +32,11 @@ excelFileName = "VPD PO Download Spreadsheet v1.1.xlsx"
 
 df = pd.read_excel(excelFileName)
 
-cartID = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+cartID = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"] 
 cartBin = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 print("Data import successful!")
-print("Generating PO download files...") 
+print("Generating PO download files, workin hard") 
 
 
 def cleanDataFrame():

@@ -2,7 +2,7 @@
 
 from SturtzFileFormats import generateSawFileLine, generateFrameLa1FileLine, lengthCorrectSturtzFormatConverter
 
-#takes in frame width from spreadsheet and returns the correct float
+#takes in frame width from spreadsheet and returns the correct float 
 def detFrameWidth(frameWidthString):
     frameWidth = 0.0
 
@@ -116,6 +116,7 @@ def detFrameQRCode(frameWidthString, frameHeightString, color):
     return frameQRCode
 
 def FrameGenerator(df, fileNameDate, fileCounter):
+    print("Generating Frame Files...")
 
     file_frameSaw = open(fileCounter + " FrameSaw-" + fileNameDate + ".SAW", "w")
     file_frameLabel = open(fileCounter + " FrameSaw-" + fileNameDate + ".la1", "w")
@@ -131,7 +132,7 @@ def FrameGenerator(df, fileNameDate, fileCounter):
         df.loc[i, "frameWelderQRCode"] = detFrameQRCode(df.iloc[i]["Frame Width"], df.iloc[i]["Frame Height"], df.iloc[i]["Color"]) 
         #going ahead and adding framewelderQR code while I'm in a dataframe loop lol don't judge
         
-        if df.iloc[i]["Type"] != "VPD ActivePanelOnly (ACT PAN)" or df.iloc[i]["Type"] != "VPD InactivePanelOnly (INA PAN)": #all other options require making a frame saw line
+        if df.iloc[i]["Type"] != "VPD ActivePanelOnly (ACT PAN)" and df.iloc[i]["Type"] != "VPD InactivePanelOnly (INA PAN)": #all other options require making a frame saw line
             frameWidth = detFrameWidth(df.iloc[i]["Frame Width"]) 
             frameHeight = detFrameHeight(df.iloc[i]["Frame Height"])
             cutLength = 0.0
@@ -167,3 +168,6 @@ def FrameGenerator(df, fileNameDate, fileCounter):
 
     file_frameSaw.close()
     file_frameLabel.close()
+    
+    print("Frame Files done")
+    

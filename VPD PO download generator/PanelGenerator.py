@@ -1,12 +1,12 @@
 #I'll put stuff related to generating panel files here
 
-from SturtzFileFormats import generateSawFileLine, generatePanelLa1FileLine
+from SturtzFileFormats import generateSawFileLine, generatePanelLa1FileLine, lengthCorrectSturtzFormatConverter
 from PanelOptimization import optimizeOrders
 from JoDebugTools import oFileCutListString, printCutList
 
 from dataclasses import dataclass, field
 
-joDebugMode = False
+joDebugMode = True
 
 @dataclass
 class OrderInfo:
@@ -29,6 +29,188 @@ class OrderList:
     profileID: str
     orders: list[OrderSet] = field(default_factory=list)
     highestUsedPosition: int = -1
+
+def addMacro_LOCKSTILE1(callSize):
+    macro = ""
+    dimC = 0.0 #from Table 3
+    
+    if callSize == "6-8":
+        dimC = 36.595
+
+    elif callSize == "6-10":
+        dimC = 37.595
+
+    elif callSize == "8-0":
+        dimC = 36.595
+        
+    location1 = dimC + 1.219
+    location2 = dimC + 2.718
+    
+    macro = macro + "Fab;LOCKSTILE1;" + lengthCorrectSturtzFormatConverter(location1) + ";\n"
+    macro = macro + "Fab;LOCKSTILE1;" + lengthCorrectSturtzFormatConverter(location2) 
+
+    return macro
+
+def addMacro_LOCKSTILE2(callSize):
+    macro = ""
+    dimC = 0.0 #from Table 3
+    
+    if callSize == "6-8":
+        dimC = 36.595
+
+    elif callSize == "6-10":
+        dimC = 37.595
+
+    elif callSize == "8-0":
+        dimC = 36.595
+        
+    location1 = dimC
+    location2 = dimC + 3.937
+    
+    macro = macro + "Fab;LOCKSTILE2;" + lengthCorrectSturtzFormatConverter(location1) + ";\n"
+    macro = macro + "Fab;LOCKSTILE2;" + lengthCorrectSturtzFormatConverter(location2) 
+
+    return macro
+
+def addMacro_LOCKSTILELOCKSTILE_ROUTE(callSize):
+    macro = ""
+    dimB = 0.0 #from Table 2
+    
+    if callSize == "6-8":
+        dimB = 35.861
+
+    elif callSize == "6-10":
+        dimB = 36.861
+
+    elif callSize == "8-0":
+        dimB = 35.861
+        
+    location = dimB + .578 + (4.250/2.0)
+    
+    macro = macro + "Fab;LOCKSTILELOCKSTILE_ROUTE;" + lengthCorrectSturtzFormatConverter(location) 
+
+    return macro
+
+def addMacro_LOCKSTILE3(callSize):
+    macro = ""
+    dimB = 0.0 #from Table 2
+    
+    if callSize == "6-8":
+        dimB = 35.861
+
+    elif callSize == "6-10":
+        dimB = 36.861
+
+    elif callSize == "8-0":
+        dimB = 35.861
+        
+    location1 = dimB
+    location2 = dimB + .578 + 4.250 + .578
+    
+    macro = macro + "Fab;LOCKSTILE3;" + lengthCorrectSturtzFormatConverter(location1) + ";\n"
+    macro = macro + "Fab;LOCKSTILE3;" + lengthCorrectSturtzFormatConverter(location2)
+
+
+    return macro
+
+def addMacro_LOCKSTILE1_SINGLE(callSize):
+    macro = ""
+    dimC = 0.0 #from Table 3
+    
+    if callSize == "6-8":
+        dimC = 36.595
+
+    elif callSize == "6-10":
+        dimC = 37.595
+
+    elif callSize == "8-0":
+        dimC = 36.595
+        
+    location1 = dimC + 1.219
+    location2 = dimC + 2.718
+    
+    macro = macro + "Fab;LOCKSTILE1_SINGLE;" + lengthCorrectSturtzFormatConverter(location1) + ";\n"
+    macro = macro + "Fab;LOCKSTILE1_SINGLE;" + lengthCorrectSturtzFormatConverter(location2) 
+
+    return macro
+
+def addMacro_LOCKSTILE2_SINGLE(callSize):
+    macro = ""
+    dimC = 0.0 #from Table 3
+    
+    if callSize == "6-8":
+        dimC = 36.595
+
+    elif callSize == "6-10":
+        dimC = 37.595
+
+    elif callSize == "8-0":
+        dimC = 36.595
+        
+    location1 = dimC
+    location2 = dimC + 3.937
+    
+    macro = macro + "Fab;LOCKSTILE2_SINGLE;" + lengthCorrectSturtzFormatConverter(location1) + ";\n"
+    macro = macro + "Fab;LOCKSTILE2_SINGLE;" + lengthCorrectSturtzFormatConverter(location2) 
+
+    return macro
+
+def addMacro_LOCKSTILELOCKSTILE_ROUTE_SINGLE(callSize):
+    macro = ""
+    dimB = 0.0 #from Table 2
+    
+    if callSize == "6-8":
+        dimB = 35.861
+
+    elif callSize == "6-10":
+        dimB = 36.861
+
+    elif callSize == "8-0":
+        dimB = 35.861
+        
+    location = dimB + .578 + (4.250/2.0)
+    
+    macro = macro + "Fab;LOCKSTILELOCKSTILE_ROUTE_SINGLE;" + lengthCorrectSturtzFormatConverter(location) 
+
+    return macro
+
+def addMacro_LOCKSTILE3_SINGLE(callSize):
+    macro = ""
+    dimB = 0.0 #from Table 2
+    
+    if callSize == "6-8":
+        dimB = 35.861
+
+    elif callSize == "6-10":
+        dimB = 36.861
+
+    elif callSize == "8-0":
+        dimB = 35.861
+        
+    location1 = dimB
+    location2 = dimB + .578 + 4.250 + .578
+    
+    macro = macro + "Fab;LOCKSTILE3_SINGLE;" + lengthCorrectSturtzFormatConverter(location1) + ";\n"
+    macro = macro + "Fab;LOCKSTILE3_SINGLE;" + lengthCorrectSturtzFormatConverter(location2)
+
+    return macro
+
+def addPanelMacros(profileID, frameHeightString):
+    panelMacros = ""
+    
+    if profileID == "VPDPAV2":
+        panelMacros = panelMacros + addMacro_LOCKSTILE1(frameHeightString) + ";\n"
+        panelMacros = panelMacros + addMacro_LOCKSTILE2(frameHeightString) + ";\n"
+        panelMacros = panelMacros + addMacro_LOCKSTILELOCKSTILE_ROUTE(frameHeightString) + ";\n"
+        panelMacros = panelMacros + addMacro_LOCKSTILE3(frameHeightString) + ";\n"
+        
+    elif profileID == "VPDPBV2" or profileID == "VPDPAV1":
+        panelMacros = panelMacros + addMacro_LOCKSTILE1_SINGLE(frameHeightString) + ";\n"
+        panelMacros = panelMacros + addMacro_LOCKSTILE2_SINGLE(frameHeightString) + ";\n"
+        panelMacros = panelMacros + addMacro_LOCKSTILELOCKSTILE_ROUTE_SINGLE(frameHeightString) + ";\n"
+        panelMacros = panelMacros + addMacro_LOCKSTILE3_SINGLE(frameHeightString) + ";\n"
+
+    return panelMacros
 
 def sawString(incomingOrderSet, profileID, color, cartID, cartBin, length):
     sawString = ""
@@ -71,8 +253,8 @@ def findCartBin(df, orderNum):
 
     return cartBin
     
-
 def PanelGenerator(df, fileNameDate, fileCounter):
+    print("Generating Panel Files")
     cutList: list[OrderList] = optimizeOrders(df)
     
     file_panelSaw = open(fileCounter + " PanelSaw-" + fileNameDate + ".SAW", "w")
@@ -97,6 +279,20 @@ def PanelGenerator(df, fileNameDate, fileCounter):
         
         for j in range(len(cutList[i].orders)):
             
+            matchIndex = -1
+            
+            #Waitttt actually, now I'm using this to find frameHeight soooo don't delete fully later lol
+            for k, rows in df.iterrows(): #this is just for testing purposes, will delete later
+                if df.iloc[k]["Full Scannable Order Number"] == cutList[i].orders[j].order1.fullOrderNum:
+                    matchIndex = k
+                    df.loc[k, "panelComponentsCut"] = df.iloc[k]["panelComponentsCut"] + 1
+                    #if joDebugMode:
+                    #    if df.iloc[k]["panelComponentsCut"] == df.iloc[k]["panelComponentsNeeded"]:
+                    #        file_panelSaw.write("**DEBUGGING LINE**  ")
+                    #        file_panelSaw.write("Unit (" + str(k+1) + ") " +  df.iloc[k]["Full Scannable Order Number"] + " is Complete!")
+                    #        file_panelSaw.write("  **END DEBUGGING LINE**" + "\n")
+                    break
+                
             file_panelSaw.write(sawString(cutList[i].orders[j], 
                                 cutList[i].profileID, 
                                 cutList[i].color,
@@ -104,19 +300,16 @@ def PanelGenerator(df, fileNameDate, fileCounter):
                                 findCartBin(df, cutList[i].orders[j].order1.fullOrderNum),
                                 cutList[i].orders[j].length)
             )
+            file_panelSaw.write(addPanelMacros(cutList[i].profileID, df.iloc[matchIndex]["Frame Height"]))
             
             file_panelLabel.write(labelString(cutList[i].orders[j], df, countForLabel))
             countForLabel = countForLabel + 1
           
-            for k, rows in df.iterrows(): #this is just for testing purposes, will delete later
-                if df.iloc[k]["Full Scannable Order Number"] == cutList[i].orders[j].order1.fullOrderNum:
-                    df.loc[k, "panelComponentsCut"] = df.iloc[k]["panelComponentsCut"] + 1
-                    if joDebugMode:
-                        if df.iloc[k]["panelComponentsCut"] == df.iloc[k]["panelComponentsNeeded"]:
+            if joDebugMode:
+                        if df.iloc[matchIndex]["panelComponentsCut"] == df.iloc[matchIndex]["panelComponentsNeeded"]:
                             file_panelSaw.write("**DEBUGGING LINE**  ")
-                            file_panelSaw.write("Unit (" + str(k+1) + ") " +  df.iloc[k]["Full Scannable Order Number"] + " is Complete!")
+                            file_panelSaw.write("Unit (" + str(matchIndex+1) + ") " +  df.iloc[matchIndex]["Full Scannable Order Number"] + " is Complete!")
                             file_panelSaw.write("  **END DEBUGGING LINE**" + "\n")
-                    break
                 
             if cutList[i].orders[j].order2.fullOrderNum != "": #this is just for testing purposes, will delete later
                 for k, rows in df.iterrows():
@@ -149,3 +342,4 @@ def PanelGenerator(df, fileNameDate, fileCounter):
 
     file_panelSaw.close()
     file_panelLabel.close()
+    print("kk, Panel Files done")
