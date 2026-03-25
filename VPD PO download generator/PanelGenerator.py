@@ -6,7 +6,7 @@ from JoDebugTools import oFileCutListString, printCutList
 
 from dataclasses import dataclass, field
 
-joDebugMode = True
+joDebugMode = False
 
 @dataclass
 class OrderInfo:
@@ -87,7 +87,7 @@ def addMacro_LOCKSTILELOCKSTILE_ROUTE(callSize):
         
     location = dimB + .578 + (4.250/2.0)
     
-    macro = macro + "Fab;LOCKSTILELOCKSTILE_ROUTE;" + lengthCorrectSturtzFormatConverter(location) 
+    macro = macro + "Fab;LOCKSTILE_ROUTE;" + lengthCorrectSturtzFormatConverter(location) 
 
     return macro
 
@@ -170,7 +170,7 @@ def addMacro_LOCKSTILELOCKSTILE_ROUTE_SINGLE(callSize):
         
     location = dimB + .578 + (4.250/2.0)
     
-    macro = macro + "Fab;LOCKSTILELOCKSTILE_ROUTE_SINGLE;" + lengthCorrectSturtzFormatConverter(location) 
+    macro = macro + "Fab;LOCKSTILE_ROUTE_SINGLE;" + lengthCorrectSturtzFormatConverter(location) 
 
     return macro
 
@@ -271,9 +271,14 @@ def PanelGenerator(df, fileNameDate, fileCounter):
             file_panelSaw.write("**DEBUGGING LINE**  ")
             file_panelSaw.write("NewBar length: " + str("%.3f" % round(barLength, 3)) )
             file_panelSaw.write("  **END DEBUGGING LINE**" + "\n")
+            
+        file_panelSaw.write(generateSawFileLine(
+            "NEWBAR", cutList[i].profileID, cutList[i].color, "A", 0, 0, "", barLength))
+        #print(generateSawFileLine(
+        #    "NEWBAR", cutList[i].profileID, cutList[i].color, "A", 0, 0, "", barLength))
         
-        trim_initial = 1  #this is just for testing purposes, will delete later
-        trim_inBetweenCuts =  2  #this is just for testing purposes, will delete later
+        trim_initial = .5  #this is just for testing purposes, will delete later
+        trim_inBetweenCuts =  .25  #this is just for testing purposes, will delete later
         trimLoss = trim_initial  #this is just for testing purposes, will delete later
         cutLoss = 0#this is just for testing purposes, will delete later
         
@@ -294,7 +299,9 @@ def PanelGenerator(df, fileNameDate, fileCounter):
                     break
                 
             file_panelSaw.write(sawString(cutList[i].orders[j], 
-                                cutList[i].profileID, 
+                                 cutList[i].orders[j].profileID,         
+                                #cutList[i].profileID, 
+                                #df.iloc[matchIndex]["profileID"],
                                 cutList[i].color,
                                 findCartID(df, cutList[i].orders[j].order1.fullOrderNum),
                                 findCartBin(df, cutList[i].orders[j].order1.fullOrderNum),

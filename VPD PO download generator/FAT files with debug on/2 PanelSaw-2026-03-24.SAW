@@ -1,0 +1,165 @@
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-1     PVPDPAH2   TWHWHNA01AA001C001-1;001-2                                                 L04781
+K001-1     PVPDPAH2   TWHWHNA01AA001C001-1;001-2                                                 L04781
+K001-3     PVPDPAH2   TWHWHNA03AA001C001-3;001-4                                                 L04781
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(143.436) - trimLoss(7.000) = scrapLength(6.564)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-1     PVPDPAV2   TWHWHNA01AA001C001-1;001-2                                                 L09312
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(93.125) - trimLoss(3.000) = scrapLength(60.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-1     PVPDPSV2   TWHWHNA01AA001C001-1;001-2                                                 L09312
+**DEBUGGING LINE**  Unit (1) 001-1 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (2) 001-2 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(93.125) - trimLoss(3.000) = scrapLength(60.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-3     PVPDPAV2   TWHWHNA03AA001C001-3;001-4                                                 L09312
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(93.125) - trimLoss(3.000) = scrapLength(60.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-3     PVPDPSH2   TWHWHNA03AA001C001-3;001-4                                                 L04781
+K001-5     PVPDPSH2   TWHWHNA05AA001C001-5;001-6                                                 L04781
+K001-5     PVPDPSH2   TWHWHNA05AA001C001-5;001-6                                                 L04781
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(143.436) - trimLoss(7.000) = scrapLength(6.564)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-3     PVPDPSV2   TWHWHNA03AA001C001-3;001-4                                                 L09312
+**DEBUGGING LINE**  Unit (3) 001-3 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (4) 001-4 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(93.125) - trimLoss(3.000) = scrapLength(60.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-5     PVPDPAV2   TWHWHNA05AA001C001-5;001-6                                                 L09312
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(93.125) - trimLoss(3.000) = scrapLength(60.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K001-5     PVPDPSV2   TWHWHNA05AA001C001-5;001-6                                                 L09312
+**DEBUGGING LINE**  Unit (5) 001-5 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (6) 001-6 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(93.125) - trimLoss(3.000) = scrapLength(60.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-1     PVPDPAH2   TWHWHNA07AA001C002-1;002-2                                                 L03581
+K002-1     PVPDPAH2   TWHWHNA07AA001C002-1;002-2                                                 L03581
+K002-3     PVPDPAH2   TWHWHNA09AA001C002-3;002-4                                                 L03581
+K002-3     PVPDPAH2   TWHWHNA09AA001C002-3;002-4                                                 L03581
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(143.248) - trimLoss(9.000) = scrapLength(4.752)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-1     PVPDPAV2   TWHWHNA07AA001C002-1;002-2                                                 L07712
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-1     PVPDPSV2   TWHWHNA07AA001C002-1;002-2                                                 L07712
+**DEBUGGING LINE**  Unit (7) 002-1 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (8) 002-2 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-3     PVPDPAV2   TWHWHNA09AA001C002-3;002-4                                                 L07712
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-3     PVPDPSV2   TWHWHNA09AA001C002-3;002-4                                                 L07712
+**DEBUGGING LINE**  Unit (9) 002-3 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (10) 002-4 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-5     PVPDPAH2   TWHWHNB01BA001C002-5;002-6                                                 L03581
+K002-5     PVPDPAH2   TWHWHNB01BA001C002-5;002-6                                                 L03581
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(71.624) - trimLoss(5.000) = scrapLength(80.376)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-5     PVPDPAV2   TWHWHNB01BA001C002-5;002-6                                                 L07712
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K002-5     PVPDPSV2   TWHWHNB01BA001C002-5;002-6                                                 L07712
+**DEBUGGING LINE**  Unit (11) 002-5 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (12) 002-6 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-1     PVPDPAH2   TBKWHNB03BA001C003-1;003-2                                                 L03581
+K003-1     PVPDPAH2   TBKWHNB03BA001C003-1;003-2                                                 L03581
+K003-3     PVPDPAH2   TBKWHNB05BA001C003-3;003-4                                                 L03581
+K003-3     PVPDPAH2   TBKWHNB05BA001C003-3;003-4                                                 L03581
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(143.248) - trimLoss(9.000) = scrapLength(4.752)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-1     PVPDPAV2   TBKWHNB03BA001C003-1;003-2                                                 L07712
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-1     PVPDPSV2   TBKWHNB03BA001C003-1;003-2                                                 L07712
+**DEBUGGING LINE**  Unit (13) 003-1 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (14) 003-2 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-3     PVPDPAV2   TBKWHNB05BA001C003-3;003-4                                                 L07712
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-3     PVPDPSV2   TBKWHNB05BA001C003-3;003-4                                                 L07712
+**DEBUGGING LINE**  Unit (15) 003-3 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (16) 003-4 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-5     PVPDPAH2   TBKWHNB07BA001C003-5;003-6                                                 L03581
+K003-5     PVPDPAH2   TBKWHNB07BA001C003-5;003-6                                                 L03581
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(71.624) - trimLoss(5.000) = scrapLength(80.376)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-5     PVPDPAV2   TBKWHNB07BA001C003-5;003-6                                                 L07712
+Fab;LOCKSTILE1;03781;
+Fab;LOCKSTILE1;03931;
+Fab;LOCKSTILE2;03659;
+Fab;LOCKSTILE2;04053;
+Fab;LOCKSTILELOCKSTILE_ROUTE;03856;
+Fab;LOCKSTILE3;03586;
+Fab;LOCKSTILE3;04127;
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**
+**DEBUGGING LINE**  NewBar length: 157.000  **END DEBUGGING LINE**
+K003-5     PVPDPSV2   TBKWHNB07BA001C003-5;003-6                                                 L07712
+**DEBUGGING LINE**  Unit (17) 003-5 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Unit (18) 003-6 is Complete!  **END DEBUGGING LINE**
+**DEBUGGING LINE**  Theoretical remaining scrap length: barLength(157.000) - cutLoss(77.125) - trimLoss(3.000) = scrapLength(76.875)  **END DEBUGGING LINE**

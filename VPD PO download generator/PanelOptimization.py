@@ -32,9 +32,9 @@ class OrderList:
 #variables that I don't think will change
 stockLength_panelLineal = 157 #   157", 13'-1"   192 #
 stockLength_frameLineal = 197 #   197", 16'-5"
-stockLength_minLength = 3 #3     #   3" min, the shortest material machine can hold before it fucks up
-trim_initial = 1  # 1" initial cut trim   4.5 #
-trim_inBetweenCuts =   2  # 2" to account for blade thickness and nailfin offsets #JO VERIFY IN THE GEOMETRYYYYYYYYYY   1 #
+stockLength_minLength = 5 #3     #   3" min, the shortest material machine can hold before it fucks up
+trim_initial = .5  # 1" initial cut trim   4.5 #
+trim_inBetweenCuts =  .25  # 2" to account for blade thickness and nailfin offsets #JO VERIFY IN THE GEOMETRYYYYYYYYYY   1 #
 
 componentList = [
     "Active Horizontal", #0
@@ -70,6 +70,15 @@ def detFrameWidth(frameWidthString):
 
     elif frameWidthString == "8-0":
         frameWidth = 95.500
+        
+    elif frameWidthString == "p36.25":
+        frameWidth = 72.376
+        
+    elif frameWidthString == "p15.75":
+        frameWidth = 31.376
+        
+    elif frameWidthString == "p12.25":
+        frameWidth = 24.376
 
     else: frameWidth = float(frameWidthString) 
     
@@ -99,6 +108,15 @@ def detFrameHeight(frameHeightString):
         
     elif frameHeightString == "8-0":
         frameHeight = 95.500
+
+    elif frameHeightString == "p36.25":
+        frameHeight = 38.265
+
+    elif frameHeightString == "p15.75":
+        frameHeight = 17.765
+        
+    elif frameHeightString == "p12.25":
+        frameHeight = 12.265     #14.265
         
     else: frameHeight = float(frameHeightString) 
     

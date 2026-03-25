@@ -116,7 +116,7 @@ def generatePanelLa1FileLine(orderNum1, orderNum2, df, count):
     #add order1 info
     if orderRow != -1:
        panelLa1FileLine = panelLa1FileLine + "LabId;" + str(count) + ";\n"
-       panelLa1FileLine = panelLa1FileLine + "FE=Sturtz1;\n"
+       panelLa1FileLine = panelLa1FileLine + "FE=Sturtz3;\n" ##Updated 3/24/2026 during FAT
        panelLa1FileLine = panelLa1FileLine + "S1=" + df.iloc[orderRow]["Frame Width"] + " x " + df.iloc[orderRow]["Frame Height"] + ";\n"
        panelLa1FileLine = panelLa1FileLine + "S2=" + str(df.iloc[orderRow]["Schedule Date"].date()) + ";\n"
        panelLa1FileLine = panelLa1FileLine + "S3=" + str(orderNum1) + ";\n"
@@ -145,7 +145,7 @@ def generatePanelLa1FileLine(orderNum1, orderNum2, df, count):
         
             #add order2 info
             if orderRow != -1:
-               panelLa1FileLine = panelLa1FileLine + "FE=Sturtz1;\n"
+               panelLa1FileLine = panelLa1FileLine + "FE=Sturtz3;\n" ##Updated 3/24/2026 during FAT
                panelLa1FileLine = panelLa1FileLine + "S1=" + df.iloc[orderRow]["Frame Width"] + " x " + df.iloc[orderRow]["Frame Height"] + ";\n"
                panelLa1FileLine = panelLa1FileLine + "S2=" + str(df.iloc[orderRow]["Schedule Date"].date()) + ";\n"
                panelLa1FileLine = panelLa1FileLine + "S3=" + str(orderNum1) + ";\n"
@@ -170,7 +170,7 @@ def generateFrameLa1FileLine(count, date, orderNum, customer, frameWidth, frameH
     frameLa1FileLine = ""
 
     frameLa1FileLine = frameLa1FileLine + "LabId;" + str(count) + ";\n"
-    frameLa1FileLine = frameLa1FileLine + "FE=Sturtz1;\n"
+    frameLa1FileLine = frameLa1FileLine + "FE=Sturtz2;\n" ##Updated 3/24/2026 during FAT
     frameLa1FileLine = frameLa1FileLine + "S1=" + str(date.date()) + ";\n"
     frameLa1FileLine = frameLa1FileLine + "S2=" + "" + ";\n"
     frameLa1FileLine = frameLa1FileLine + "S3=" + str(orderNum) + ";\n"

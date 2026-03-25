@@ -10,10 +10,18 @@
 #            Note to self: If I could figure out a better way to input the data from Atlas into the program, that would 
 #            be a game changer. Future research should involve accessing SQL databases through my programs
 
-#BETA v1.2   Bug fixes
+#BETA v1.1.1   Bug fixes
 #            General observations: I don't like all of the loops I'm using. Not bad for whipping something up in just 6 days 
 #            worth of programming, but def think about ways to improve this. A lot of my loops in the panel come from searching
 #            the dataframe to find a particular order's row. I'd start here for my thoughts
+
+#BETA v1.1.2   Field changes:
+#           -Had an error in my logic for the profileID when info is saved into the file. I didn't go deep enough; I used the 
+#            cutlist's profileID instead of the embedded order's profileID. Don't judge, I made this system on-the-fly
+#           -Updated trim values for optimization to match the values I'm seeing here at Sturtz. Fun fact, my optimization was
+#            so good that it uncovered a logic error in their equipment and made it crash XD They had to do their own on-the-fly 
+#            adjustments hahhaaa, bless our hearts.
+#           -Added NEWBAR lines to be able to use our own pre-optimized files instead of their version of an optimizer
 
 print("Starting VPD's PO Download Generator!")
 print("Importing data...")
